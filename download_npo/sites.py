@@ -62,6 +62,7 @@ class Site():
         headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0',
             'Cookie': 'npo_cc=tmp; npo_cc_www.npogeschiedenis.nl=tmp',
+            'X-Requested-With: XMLHttpRequest,
         }
         req = urllib2.Request(url, headers=headers)
         try:
@@ -315,14 +316,14 @@ class NPOPlayer(Site):
         else:
             series_id = url
 
-        url = 'http://www.npo.nl/media/series/{}/episodes'.format(url)
+        url = 'https://www.npo.nl/media/series/{}/episodes'.format(url)
 
         if not url.endswith('/episodes'):
             url += '/episodes'
         url += '?tilemapping=dedicated&tiletype=asset&page={}'.format(page)
         p = self.get_page(url)
 
-        matches = re.findall(r'id=["\']([A-Z][A-Z_]{1,8}_\d{6,9})["\'].*?alt=["\'](.*?)["\'] onerror',
+        matches = re.findall(r'id=\\["\']([A-Z][A-Z_]{1,8}_\d{6,9})\\["\'].*?alt=\\["\'](.*?)\\["\'] onerror',
                              p, re.DOTALL | re.MULTILINE)
 
         ret = []
